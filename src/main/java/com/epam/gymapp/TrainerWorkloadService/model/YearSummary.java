@@ -29,23 +29,13 @@ public class YearSummary {
     private Year year;
 
     @OneToMany(mappedBy = "yearSummary", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<MonthSummary> months = new ArrayList<>();
+    private List<MonthSummary> months = new ArrayList<>();
 
-    public YearSummary( Year year, TrainerWorkload trainerWorkload) {
+    public YearSummary(Year year, TrainerWorkload trainerWorkload) {
         this.trainerWorkload = trainerWorkload;
         this.year = year;
     }
 
-    public MonthSummary getOrCreateMonth(Month month) {
-       return months.stream()
-                .filter(m -> m.getMonth() == month)
-                .findFirst()
-                .orElseGet(()-> {
-                    MonthSummary newMonth =  new MonthSummary(month, this);
-                    this.addMonthSummary(newMonth);
-                    return newMonth;
-                });
-    }
 
     public void addMonthSummary(MonthSummary monthSummary) {
         months.add(monthSummary);

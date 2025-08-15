@@ -19,19 +19,19 @@ public class MonthSummary {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    YearSummary yearSummary;
+    private YearSummary yearSummary;
 
-    @Convert(converter=MonthConverter.class)
+    @Convert(converter = MonthConverter.class)
     @Column(name = "training_month")
     private Month month;
 
     @Column(name = "totalDuration")
     private Integer totalDuration;
 
-    public MonthSummary (Month month, YearSummary yearSummary){
-        this.month=month;
-        this.yearSummary=yearSummary;
-        this.totalDuration=0;
+    public MonthSummary(Month month, YearSummary yearSummary) {
+        this.month = month;
+        this.yearSummary = yearSummary;
+        this.totalDuration = 0;
     }
 
     public void addDuration(int duration) {

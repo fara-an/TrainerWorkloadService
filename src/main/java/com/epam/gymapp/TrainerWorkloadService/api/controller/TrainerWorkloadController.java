@@ -1,4 +1,4 @@
-package com.epam.gymapp.TrainerWorkloadService.controller;
+package com.epam.gymapp.TrainerWorkloadService.api.controller;
 
 import com.epam.gymapp.TrainerWorkloadService.dto.TrainerWorkloadRequest;
 import com.epam.gymapp.TrainerWorkloadService.dto.TrainerWorkloadSummaryResponse;
@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/trainer-workload")
+@RequestMapping("/trainer-workloads")
 public class TrainerWorkloadController {
 
     TrainerWorkloadService trainerWorkloadService;
@@ -23,7 +23,7 @@ public class TrainerWorkloadController {
 
     }
 
-    @GetMapping("/trainer/{trainerUsername}")
+    @GetMapping("/{trainerUsername}")
     public ResponseEntity<TrainerWorkloadSummaryResponse> returnWorkload(@PathVariable("trainerUsername") String trainerUsername) {
         TrainerWorkloadSummaryResponse trainerWorkloadSummaryResponse = trainerWorkloadService.calculateTrainerWorkloadSummary(trainerUsername);
         return ResponseEntity.ok(trainerWorkloadSummaryResponse);

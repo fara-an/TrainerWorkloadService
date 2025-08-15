@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,19 +14,19 @@ import java.util.List;
 public class TrainerWorkload {
 
     @Id
-    @Column(name = "trainer_username")
-    private String trainerUsername;
+    @Column(name = "username")
+    private String username;
 
     @Setter
-    @Column(name = "trainer_firstName")
+    @Column(name = "firstName")
     private String firstName;
 
     @Setter
-    @Column(name = "trainer_lastname")
+    @Column(name = "lastname")
     private String lastName;
 
     @Setter
-    @Column(name = "trainer_is_active")
+    @Column(name = "is_active")
     private boolean isActive;
 
     @Setter
@@ -35,20 +34,7 @@ public class TrainerWorkload {
     private List<YearSummary> years = new ArrayList<>();
 
     public TrainerWorkload(String trainerUsername) {
-        this.trainerUsername = trainerUsername;
-    }
-
-
-    public YearSummary getOrCreateYear(Year year) {
-        return years.stream()
-                .filter(y -> y.getYear().equals(year))
-                .findFirst()
-                .orElseGet(() -> {
-                    System.out.println("New YearSummary is getting created ");
-                    YearSummary yearSummary = new YearSummary(year, this);
-                    this.addYearSummary(yearSummary);
-                    return yearSummary;
-                });
+        this.username = trainerUsername;
     }
 
 
