@@ -39,9 +39,7 @@ public class TrainerWorkload {
 
 
     public void addYearSummary(YearSummary yearSummary) {
-        System.out.println("Adding year summary to list");
         years.add(yearSummary);
-        System.out.println(years.size());
         yearSummary.setTrainerWorkload(this);
     }
 

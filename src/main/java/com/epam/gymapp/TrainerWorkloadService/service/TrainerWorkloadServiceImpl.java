@@ -80,7 +80,7 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
                 .filter(y -> y.getYear().equals(year))
                 .findFirst()
                 .orElseGet(() -> {
-                    System.out.println("New YearSummary is getting created ");
+                  LOGGER.debug("New YearSummary is getting created ");
                     YearSummary yearSummary = new YearSummary(year, trainerWorkload);
                     trainerWorkload.addYearSummary(yearSummary);
                     return yearSummary;
