@@ -3,6 +3,7 @@ package com.epam.gymapp.TrainerWorkloadService.api.controller;
 import com.epam.gymapp.TrainerWorkloadService.dto.TrainerWorkloadRequest;
 import com.epam.gymapp.TrainerWorkloadService.dto.TrainerWorkloadSummaryResponse;
 import com.epam.gymapp.TrainerWorkloadService.service.TrainerWorkloadService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,14 +11,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/trainer-workloads")
 public class TrainerWorkloadController {
 
-    TrainerWorkloadService trainerWorkloadService;
+    private TrainerWorkloadService trainerWorkloadService;
 
     public TrainerWorkloadController(TrainerWorkloadService trainerWorkloadService) {
         this.trainerWorkloadService = trainerWorkloadService;
     }
 
     @PostMapping
-    public ResponseEntity<Void> handleWorkload(@RequestBody TrainerWorkloadRequest request) {
+    public ResponseEntity<Void> handleWorkload(@Valid @RequestBody TrainerWorkloadRequest request) {
         trainerWorkloadService.processTrainerWorkload(request);
         return ResponseEntity.ok().build();
 

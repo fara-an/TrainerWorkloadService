@@ -5,8 +5,4 @@ public class EntityNotFoundException extends RuntimeException {
         super(message);
     }
 
-    public String getUserMessage() {
-        return "Error occurred during database interaction.";
-    }
-
 }

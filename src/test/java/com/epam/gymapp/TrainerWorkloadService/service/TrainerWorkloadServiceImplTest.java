@@ -72,11 +72,10 @@ public class TrainerWorkloadServiceImplTest {
     }
     @Test
     void processTrainerWorkload_existingTrainer_deletesDuration() {
-        // given
         TrainerWorkload existing = new TrainerWorkload("john_doe");
         YearSummary ys = new YearSummary(Year.of(2025), existing);
         MonthSummary ms = new MonthSummary(Month.MARCH, ys);
-        ms.addDuration(120); // initial value
+        ms.addDuration(120);
         ys.addMonthSummary(ms);
         existing.addYearSummary(ys);
 
@@ -88,17 +87,14 @@ public class TrainerWorkloadServiceImplTest {
 
         when(trainerWorkloadRepository.findById("john_doe")).thenReturn(Optional.of(existing));
 
-        // when
         underTest.processTrainerWorkload(request);
 
-        // then
         assertEquals(90, ms.getTotalDuration());
         verify(trainerWorkloadRepository).save(existing);
     }
 
     @Test
     void calculateTrainerWorkloadSummary_existingTrainer_returnsSummary() {
-        // given
         TrainerWorkload trainer = new TrainerWorkload("john_doe");
         trainer.setFirstName("John");
         trainer.setLastName("Doe");
@@ -110,10 +106,8 @@ public class TrainerWorkloadServiceImplTest {
 
         when(trainerWorkloadRepository.findById("john_doe")).thenReturn(Optional.of(trainer));
 
-        // when
         TrainerWorkloadSummaryResponse response = underTest.calculateTrainerWorkloadSummary("john_doe");
 
-        // then
         assertEquals("john_doe", response.getTrainerUsername());
         assertEquals("John", response.getFirstName());
         assertTrue(response.isStatus());

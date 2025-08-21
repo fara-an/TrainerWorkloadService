@@ -17,11 +17,13 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final String ENTITY_NOT_FOUND_EXCEPTION_MESSAGE ="Error occurred during database interaction.";
+    private static final String GENERAL_EXCEPTION_MESSAGE ="Something went wrong on our side. Please try again later.";
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> handleEntityNotFoundException(EntityNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(build(ex.getUserMessage()));
+                .body(build(ENTITY_NOT_FOUND_EXCEPTION_MESSAGE));
     }
 
 
@@ -47,7 +49,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<MessageResponse> handleException() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(build("It is not you it is us )"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(build(GENERAL_EXCEPTION_MESSAGE));
     }
 
     private MessageResponse build(String message) {
