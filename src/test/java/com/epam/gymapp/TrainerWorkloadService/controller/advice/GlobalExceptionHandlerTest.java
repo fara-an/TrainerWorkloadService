@@ -31,7 +31,7 @@ public class GlobalExceptionHandlerTest {
 
     @Test
     void missingRequestParam_shouldReturn400() throws Exception {
-        mockMvc.perform(get("/test/missing-param")) // missing param=...
+        mockMvc.perform(get("/test/missing-param"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message",
                         containsString("Request parameter param")));
