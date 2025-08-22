@@ -43,8 +43,5 @@ public class TrainerWorkload {
         yearSummary.setTrainerWorkload(this);
     }
 
-    public void removeYearSummary(YearSummary yearSummary) {
-        years.remove(yearSummary);
-        yearSummary.setTrainerWorkload(null);
-    }
+
 }
