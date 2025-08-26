@@ -1,5 +1,6 @@
 package com.epam.gymapp.TrainerWorkloadService.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -22,6 +23,7 @@ public class TrainerWorkloadRequest {
     private String lastName;
     private boolean isActive;
     @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime trainingDate;
     @Positive
     private Integer duration;

@@ -17,12 +17,12 @@ public class TrainerWorkloadController {
         this.trainerWorkloadService = trainerWorkloadService;
     }
 
-    @PostMapping
-    public ResponseEntity<Void> handleWorkload(@Valid @RequestBody TrainerWorkloadRequest request) {
-        trainerWorkloadService.processTrainerWorkload(request);
-        return ResponseEntity.ok().build();
-
-    }
+//    @PostMapping
+//    public ResponseEntity<Void> handleWorkload(@Valid @RequestBody TrainerWorkloadRequest request) {
+//        trainerWorkloadService.processTrainerWorkload(request);
+//        return ResponseEntity.ok().build();
+//
+//    }
 
     @GetMapping("/{trainerUsername}")
     public ResponseEntity<TrainerWorkloadSummaryResponse> returnWorkload(@PathVariable("trainerUsername") String trainerUsername) {

@@ -6,9 +6,12 @@ import com.epam.gymapp.TrainerWorkloadService.model.MonthSummary;
 import com.epam.gymapp.TrainerWorkloadService.model.TrainerWorkload;
 import com.epam.gymapp.TrainerWorkloadService.model.YearSummary;
 import com.epam.gymapp.TrainerWorkloadService.repository.TrainerWorkloadRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -22,10 +25,13 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
 
     private final TrainerWorkloadRepository trainerWorkloadRepository;
 
+
     public TrainerWorkloadServiceImpl(TrainerWorkloadRepository trainerWorkloadRepository) {
         this.trainerWorkloadRepository = trainerWorkloadRepository;
     }
 
+    @JmsListener(destination = "${queue.trainerWorkload}",  concurrency = "3-10")
+    @Transactional
     @Override
     public void processTrainerWorkload(TrainerWorkloadRequest workloadRequest) {
         LOGGER.debug("Started to process {}'s work hours", workloadRequest.getTrainerUsername());
@@ -34,6 +40,10 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
         Year year = Year.from(date);
         LOGGER.debug("Year is {} ", year.getValue());
         Month month = date.getMonth();
+
+//        if (true){
+//            throw new RuntimeException("boom");
+//        }
 
 
         TrainerWorkload trainerWorkload = trainerWorkloadRepository.findById(trainerUsername)
@@ -57,6 +67,12 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
         trainerWorkloadRepository.save(trainerWorkload);
     }
 
+    @JmsListener(destination = "ActiveMQ.DLQ",  concurrency = "3-10")
+    public void deadLetterHandler(Object failedMessage) {
+        System.err.println("Message moved to DLQ: " + failedMessage);
+    }
+
+    @Transactional
     @Override
     public TrainerWorkloadSummaryResponse calculateTrainerWorkloadSummary(String trainerUsername) {
         TrainerWorkload trainerWorkload = trainerWorkloadRepository.findById(trainerUsername).orElseThrow(() -> new EntityNotFoundException("Trainer with username " + trainerUsername + " not foound"));
