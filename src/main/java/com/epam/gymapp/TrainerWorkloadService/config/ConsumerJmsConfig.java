@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
-import org.springframework.jms.connection.JmsTransactionManager;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
@@ -57,28 +56,22 @@ public class ConsumerJmsConfig {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(messageConverter);
-        factory.setTransactionManager(platformTransactionManager);
+        factory.setSessionTransacted(true);
         factory.setConcurrency("3-10");
         factory.setErrorHandler(t -> logger.error("JMS error: ", t));
         return factory;
     }
 
-    @Bean
-    public PlatformTransactionManager transactionManager(ConnectionFactory connectionFactory) {
-        return new JmsTransactionManager(connectionFactory);
-    }
 
 
     @Bean
     public ActiveMQConnectionFactory activeMQConnectionFactory() {
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-
         RedeliveryPolicy policy = new RedeliveryPolicy();
         policy.setMaximumRedeliveries(3);
         policy.setInitialRedeliveryDelay(2000);
         policy.setBackOffMultiplier(2);
         policy.setUseExponentialBackOff(true);
-
         factory.setRedeliveryPolicy(policy);
         return factory;
     }

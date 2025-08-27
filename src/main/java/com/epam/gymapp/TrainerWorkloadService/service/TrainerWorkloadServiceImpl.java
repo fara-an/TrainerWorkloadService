@@ -6,7 +6,6 @@ import com.epam.gymapp.TrainerWorkloadService.model.MonthSummary;
 import com.epam.gymapp.TrainerWorkloadService.model.TrainerWorkload;
 import com.epam.gymapp.TrainerWorkloadService.model.YearSummary;
 import com.epam.gymapp.TrainerWorkloadService.repository.TrainerWorkloadRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.annotation.JmsListener;
@@ -21,16 +20,13 @@ import java.util.List;
 @Service
 public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrainerWorkloadServiceImpl.class);
-
-
     private final TrainerWorkloadRepository trainerWorkloadRepository;
-
 
     public TrainerWorkloadServiceImpl(TrainerWorkloadRepository trainerWorkloadRepository) {
         this.trainerWorkloadRepository = trainerWorkloadRepository;
     }
 
-    @JmsListener(destination = "${queue.trainerWorkload}",  concurrency = "3-10")
+    @JmsListener(destination = "${queue.trainerWorkload}", concurrency = "3-10")
     @Transactional
     @Override
     public void processTrainerWorkload(TrainerWorkloadRequest workloadRequest) {
@@ -40,11 +36,6 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
         Year year = Year.from(date);
         LOGGER.debug("Year is {} ", year.getValue());
         Month month = date.getMonth();
-
-//        if (true){
-//            throw new RuntimeException("boom");
-//        }
-
 
         TrainerWorkload trainerWorkload = trainerWorkloadRepository.findById(trainerUsername)
                 .orElseGet(() -> {
@@ -67,7 +58,7 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
         trainerWorkloadRepository.save(trainerWorkload);
     }
 
-    @JmsListener(destination = "ActiveMQ.DLQ",  concurrency = "3-10")
+    @JmsListener(destination = "ActiveMQ.DLQ", concurrency = "3-10")
     public void deadLetterHandler(Object failedMessage) {
         System.err.println("Message moved to DLQ: " + failedMessage);
     }
@@ -75,7 +66,7 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
     @Transactional
     @Override
     public TrainerWorkloadSummaryResponse calculateTrainerWorkloadSummary(String trainerUsername) {
-        TrainerWorkload trainerWorkload = trainerWorkloadRepository.findById(trainerUsername).orElseThrow(() -> new EntityNotFoundException("Trainer with username " + trainerUsername + " not foound"));
+        TrainerWorkload trainerWorkload = trainerWorkloadRepository.findById(trainerUsername).orElseThrow(() -> new EntityNotFoundException("Trainer with username " + trainerUsername + " not found"));
         List<YearSummaryDto> years = trainerWorkload.getYears().stream().map(year -> new YearSummaryDto(
                 year.getYear().getValue(),
                 year.getMonths().stream()
@@ -96,7 +87,7 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
                 .filter(y -> y.getYear().equals(year))
                 .findFirst()
                 .orElseGet(() -> {
-                  LOGGER.debug("New YearSummary is getting created ");
+                    LOGGER.debug("New YearSummary is getting created ");
                     YearSummary yearSummary = new YearSummary(year, trainerWorkload);
                     trainerWorkload.addYearSummary(yearSummary);
                     return yearSummary;
