@@ -37,6 +37,10 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
         LOGGER.debug("Year is {} ", year.getValue());
         Month month = date.getMonth();
 
+//        if(true){
+//            throw new RuntimeException("boom");
+//        }
+
         TrainerWorkload trainerWorkload = trainerWorkloadRepository.findById(trainerUsername)
                 .orElseGet(() -> {
                     TrainerWorkload newTrainerWorkload = new TrainerWorkload(trainerUsername);

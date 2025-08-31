@@ -58,7 +58,7 @@ public class ConsumerJmsConfig {
         factory.setMessageConverter(messageConverter);
         factory.setSessionTransacted(true);
         factory.setConcurrency("3-10");
-        factory.setErrorHandler(t -> logger.error("JMS error: ", t));
+        factory.setErrorHandler(t -> logger.error("i am a very basic handler i just log things ", t));
         return factory;
     }
 
