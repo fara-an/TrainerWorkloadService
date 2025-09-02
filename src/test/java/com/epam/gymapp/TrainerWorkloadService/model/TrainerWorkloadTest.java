@@ -42,3 +42,4 @@ class TrainerWorkloadTest {
         assertEquals(trainer, yearSummary.getTrainerWorkload());
     }
 }
+

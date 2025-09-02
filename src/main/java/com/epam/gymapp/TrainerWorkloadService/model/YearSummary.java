@@ -46,18 +46,4 @@ public class YearSummary {
         monthSummary.setYearSummary(null);
     }
 
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof YearSummary)) return false;
-        return id != null && id.equals(((YearSummary) obj).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
-
-
 }

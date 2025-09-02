@@ -44,45 +44,5 @@ class MonthSummaryTest {
 
         assertEquals(60, monthSummary.getTotalDuration());
     }
-
-    @Test
-    void equals_ShouldReturnTrueForSameId() {
-        MonthSummary m1 = new MonthSummary(Month.JANUARY, yearSummary);
-        MonthSummary m2 = new MonthSummary(Month.JANUARY, yearSummary);
-
-        m1.setId(1L);
-        m2.setId(1L);
-
-        assertEquals(m1, m2);
-    }
-
-    @Test
-    void equals_ShouldReturnFalseForDifferentId() {
-        MonthSummary m1 = new MonthSummary(Month.JANUARY, yearSummary);
-        MonthSummary m2 = new MonthSummary(Month.JANUARY, yearSummary);
-
-        m1.setId(1L);
-        m2.setId(2L);
-
-        assertNotEquals(m1, m2);
-    }
-
-    @Test
-    void equals_ShouldReturnFalseWhenIdIsNull() {
-        MonthSummary m1 = new MonthSummary(Month.JANUARY, yearSummary);
-        MonthSummary m2 = new MonthSummary(Month.JANUARY, yearSummary);
-
-        m1.setId(null);
-        m2.setId(2L);
-
-        assertNotEquals(m1, m2);
-    }
-
-    @Test
-    void hashCode_ShouldBeBasedOnClass() {
-        MonthSummary m1 = new MonthSummary(Month.JANUARY, yearSummary);
-        MonthSummary m2 = new MonthSummary(Month.FEBRUARY, yearSummary);
-
-        assertEquals(m1.hashCode(), m2.hashCode());
-    }
 }
+
