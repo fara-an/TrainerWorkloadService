@@ -26,7 +26,6 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
         this.trainerWorkloadRepository = trainerWorkloadRepository;
     }
 
-    @JmsListener(destination = "${queue.trainerWorkload}", concurrency = "3-10")
     @Transactional
     @Override
     public void processTrainerWorkload(TrainerWorkloadRequest workloadRequest) {
@@ -59,10 +58,7 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
         trainerWorkloadRepository.save(trainerWorkload);
     }
 
-    @JmsListener(destination = "ActiveMQ.DLQ", concurrency = "3-10")
-    public void deadLetterHandler(Object failedMessage) {
-        System.err.println("Message moved to DLQ: " + failedMessage);
-    }
+
 
     @Transactional
     @Override
