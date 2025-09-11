@@ -24,7 +24,7 @@ class YearSummaryTest {
     @Test
     void addMonthSummary_ShouldAddMonthAndSetBackReference() {
         YearSummary yearSummary = new YearSummary(Year.of(2025));
-        MonthSummary monthSummary = new MonthSummary(Month.JANUARY, yearSummary);
+        MonthSummary monthSummary = new MonthSummary(Month.JANUARY);
 
         yearSummary.addMonthSummary(monthSummary);
 
@@ -34,7 +34,7 @@ class YearSummaryTest {
     @Test
     void removeMonthSummary_ShouldRemoveMonthAndClearBackReference() {
         YearSummary yearSummary = new YearSummary(Year.of(2025));
-        MonthSummary monthSummary = new MonthSummary(Month.JANUARY, yearSummary);
+        MonthSummary monthSummary = new MonthSummary(Month.JANUARY);
         yearSummary.addMonthSummary(monthSummary);
 
         yearSummary.removeMonthSummary(monthSummary);

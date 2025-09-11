@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class YearSummary {
 
-    @Id
     private int id;
 
     private Year year;
