@@ -95,7 +95,7 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
                 .filter(m -> m.getMonth() == month)
                 .findFirst()
                 .orElseGet(() -> {
-                    MonthSummary newMonth = new MonthSummary(month, yearSummary);
+                    MonthSummary newMonth = new MonthSummary(month);
                     yearSummary.addMonthSummary(newMonth);
                     return newMonth;
                 });

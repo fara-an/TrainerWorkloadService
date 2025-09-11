@@ -73,7 +73,7 @@ public class TrainerWorkloadServiceImplTest {
     void processTrainerWorkload_existingTrainer_deletesDuration() {
         TrainerWorkload existing = new TrainerWorkload("john_doe");
         YearSummary ys = new YearSummary(Year.of(2025));
-        MonthSummary ms = new MonthSummary(Month.MARCH, ys);
+        MonthSummary ms = new MonthSummary(Month.MARCH);
         ms.addDuration(120);
         ys.addMonthSummary(ms);
         existing.addYearSummary(ys);
@@ -100,7 +100,7 @@ public class TrainerWorkloadServiceImplTest {
         trainer.setActive(true);
 
         YearSummary ys = new YearSummary(Year.of(2025));
-        ys.addMonthSummary(new MonthSummary(Month.MARCH, ys));
+        ys.addMonthSummary(new MonthSummary(Month.MARCH));
         trainer.addYearSummary(ys);
 
         when(trainerWorkloadRepository.findById("john_doe")).thenReturn(Optional.of(trainer));

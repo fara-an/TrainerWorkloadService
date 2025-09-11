@@ -11,14 +11,14 @@ import java.time.Month;
 @Setter
 @NoArgsConstructor
 public class MonthSummary {
-    @Id
+
     private String id;
 
     private Month month;
 
     private Integer totalDuration;
 
-    public MonthSummary(Month month, YearSummary yearSummary) {
+    public MonthSummary(Month month) {
         this.id = month.name();
         this.month = month;
         this.totalDuration = 0;
