@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Month;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,19 +45,5 @@ public class YearSummary {
         months.remove(monthSummary);
         monthSummary.setYearSummary(null);
     }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof YearSummary)) return false;
-        return id != null && id.equals(((YearSummary) obj).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
-
 
 }

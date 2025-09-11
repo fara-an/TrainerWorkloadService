@@ -43,5 +43,4 @@ public class TrainerWorkload {
         yearSummary.setTrainerWorkload(this);
     }
 
-
 }

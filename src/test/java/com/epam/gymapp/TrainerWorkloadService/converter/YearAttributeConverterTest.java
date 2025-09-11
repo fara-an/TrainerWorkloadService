@@ -44,7 +44,6 @@ class YearAttributeConverterTest {
 
     @Test
     void testConvertToEntityAttribute_withEdgeValues() {
-        // Minimum Short (-32768) and Maximum Short (32767)
         Year minYear = converter.convertToEntityAttribute(Short.MIN_VALUE);
         Year maxYear = converter.convertToEntityAttribute(Short.MAX_VALUE);
 

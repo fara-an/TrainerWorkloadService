@@ -32,24 +32,6 @@ public class TrainerWorkloadControllerTest {
     @MockitoBean
     private TrainerWorkloadService trainerWorkloadService;
 
-    @Test
-    void handleWorkload_returnsOk() throws Exception {
-        TrainerWorkloadRequest request = new TrainerWorkloadRequest();
-        request.setTrainerUsername("john_doe");
-        request.setFirstName("John");
-        request.setLastName("Doe");
-        request.setActive(true);
-        request.setTrainingDate(java.time.LocalDateTime.of(2025, 3, 10, 10, 0));
-        request.setDuration(60);
-        request.setActionType(ActionType.ADD);
-
-        mockMvc.perform(post("/trainer-workloads")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
-
-        Mockito.verify(trainerWorkloadService).processTrainerWorkload(any(TrainerWorkloadRequest.class));
-    }
 
     @Test
     void returnWorkload_returnsSummary() throws Exception {

@@ -42,15 +42,5 @@ public class MonthSummary {
         this.totalDuration -= duration;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof MonthSummary)) return false;
-        return id != null && id.equals(((MonthSummary) obj).getId());
-    }
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
