@@ -1,7 +1,5 @@
 package com.epam.gymapp.TrainerWorkloadService.model;
 
-import com.epam.gymapp.TrainerWorkloadService.converter.YearAttributeConverter;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
