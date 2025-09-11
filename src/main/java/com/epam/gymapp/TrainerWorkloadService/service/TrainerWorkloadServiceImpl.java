@@ -9,6 +9,7 @@ import com.epam.gymapp.TrainerWorkloadService.repository.TrainerWorkloadReposito
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -18,14 +19,13 @@ import java.util.List;
 @Service
 public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrainerWorkloadServiceImpl.class);
-
-
     private final TrainerWorkloadRepository trainerWorkloadRepository;
 
     public TrainerWorkloadServiceImpl(TrainerWorkloadRepository trainerWorkloadRepository) {
         this.trainerWorkloadRepository = trainerWorkloadRepository;
     }
 
+    @Transactional
     @Override
     public void processTrainerWorkload(TrainerWorkloadRequest workloadRequest) {
         LOGGER.debug("Started to process {}'s work hours", workloadRequest.getTrainerUsername());
@@ -57,9 +57,12 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
         trainerWorkloadRepository.save(trainerWorkload);
     }
 
+
+
+    @Transactional
     @Override
     public TrainerWorkloadSummaryResponse calculateTrainerWorkloadSummary(String trainerUsername) {
-        TrainerWorkload trainerWorkload = trainerWorkloadRepository.findById(trainerUsername).orElseThrow(() -> new EntityNotFoundException("Trainer with username " + trainerUsername + " not foound"));
+        TrainerWorkload trainerWorkload = trainerWorkloadRepository.findById(trainerUsername).orElseThrow(() -> new EntityNotFoundException("Trainer with username " + trainerUsername + " not found"));
         List<YearSummaryDto> years = trainerWorkload.getYears().stream().map(year -> new YearSummaryDto(
                 year.getYear().getValue(),
                 year.getMonths().stream()
@@ -80,7 +83,7 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
                 .filter(y -> y.getYear().equals(year))
                 .findFirst()
                 .orElseGet(() -> {
-                  LOGGER.debug("New YearSummary is getting created ");
+                    LOGGER.debug("New YearSummary is getting created ");
                     YearSummary yearSummary = new YearSummary(year, trainerWorkload);
                     trainerWorkload.addYearSummary(yearSummary);
                     return yearSummary;
