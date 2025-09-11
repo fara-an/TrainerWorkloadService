@@ -84,7 +84,7 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
                 .findFirst()
                 .orElseGet(() -> {
                     LOGGER.debug("New YearSummary is getting created ");
-                    YearSummary yearSummary = new YearSummary(year, trainerWorkload);
+                    YearSummary yearSummary = new YearSummary(year);
                     trainerWorkload.addYearSummary(yearSummary);
                     return yearSummary;
                 });

@@ -5,45 +5,36 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 public class YearSummary {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private TrainerWorkload trainerWorkload;
-
-    @Convert(converter = YearAttributeConverter.class)
-    @Column(name = "training_year")
     private Year year;
 
-    @OneToMany(mappedBy = "yearSummary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MonthSummary> months = new ArrayList<>();
 
-    public YearSummary(Year year, TrainerWorkload trainerWorkload) {
-        this.trainerWorkload = trainerWorkload;
+    public YearSummary(Year year) {
+        this.id=year.getValue();
         this.year = year;
     }
 
 
     public void addMonthSummary(MonthSummary monthSummary) {
         months.add(monthSummary);
-        monthSummary.setYearSummary(this);
     }
 
     public void removeMonthSummary(MonthSummary monthSummary) {
         months.remove(monthSummary);
-        monthSummary.setYearSummary(null);
     }
 
 }
