@@ -11,16 +11,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@Profile("!local")
 @Configuration
 @EnableJms
 public class ConsumerJmsConfig {
@@ -52,11 +52,10 @@ public class ConsumerJmsConfig {
 
     @Bean
     public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(
-            ConnectionFactory connectionFactory, PlatformTransactionManager platformTransactionManager, MessageConverter messageConverter) {
+            ConnectionFactory connectionFactory,  MessageConverter messageConverter) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(messageConverter);
-        factory.setSessionTransacted(true);
         factory.setConcurrency("3-10");
         factory.setErrorHandler(t -> logger.error("i am a very basic handler i just log things ", t));
         return factory;

@@ -9,7 +9,6 @@ import com.epam.gymapp.TrainerWorkloadService.repository.TrainerWorkloadReposito
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -25,7 +24,6 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
         this.trainerWorkloadRepository = trainerWorkloadRepository;
     }
 
-    @Transactional
     @Override
     public void processTrainerWorkload(TrainerWorkloadRequest workloadRequest) {
         LOGGER.debug("Started to process {}'s work hours", workloadRequest.getTrainerUsername());
@@ -54,12 +52,12 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
         } else if (ActionType.DELETE == workloadRequest.getActionType()) {
             monthSummary.subtractDuration(workloadRequest.getDuration());
         }
+        LOGGER.debug("Saved trainerWorkload {}", trainerWorkload);
         trainerWorkloadRepository.save(trainerWorkload);
     }
 
 
 
-    @Transactional
     @Override
     public TrainerWorkloadSummaryResponse calculateTrainerWorkloadSummary(String trainerUsername) {
         TrainerWorkload trainerWorkload = trainerWorkloadRepository.findById(trainerUsername).orElseThrow(() -> new EntityNotFoundException("Trainer with username " + trainerUsername + " not found"));
@@ -100,6 +98,5 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
                     return newMonth;
                 });
     }
-
-
 }
+
