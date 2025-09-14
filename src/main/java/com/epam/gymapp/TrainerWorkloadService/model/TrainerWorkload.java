@@ -1,8 +1,6 @@
 package com.epam.gymapp.TrainerWorkloadService.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,8 +9,8 @@ import java.util.List;
 
 @Document(collection = "trainer_workloads")
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
+@Data
 public class TrainerWorkload {
     @Id
     private String username;

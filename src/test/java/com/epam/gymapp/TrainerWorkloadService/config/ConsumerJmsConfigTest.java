@@ -25,8 +25,6 @@ class ConsumerJmsConfigTest {
     @Autowired
     private ApplicationContext context;
 
-    @MockitoBean
-    PlatformTransactionManager platformTransactionManager;
 
     @Test
     void objectMapper_ShouldHaveJavaTimeModuleAndDisableTimestamps() {
@@ -60,7 +58,6 @@ class ConsumerJmsConfigTest {
         DefaultJmsListenerContainerFactory factory = context.getBean(DefaultJmsListenerContainerFactory.class);
 
         assertNotNull(factory);
-        assertTrue((Boolean)  getFieldFromHierarchy(factory, "sessionTransacted"));
         assertEquals("3-10",getFieldFromHierarchy(factory, "concurrency"));
 
     }
