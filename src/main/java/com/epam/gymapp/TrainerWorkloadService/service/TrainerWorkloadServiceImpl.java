@@ -6,9 +6,12 @@ import com.epam.gymapp.TrainerWorkloadService.model.MonthSummary;
 import com.epam.gymapp.TrainerWorkloadService.model.TrainerWorkload;
 import com.epam.gymapp.TrainerWorkloadService.model.YearSummary;
 import com.epam.gymapp.TrainerWorkloadService.repository.TrainerWorkloadRepository;
+import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -51,6 +54,8 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
             monthSummary.addDuration(workloadRequest.getDuration());
         } else if (ActionType.DELETE == workloadRequest.getActionType()) {
             monthSummary.subtractDuration(workloadRequest.getDuration());
+        }else {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(HttpStatus.SC_BAD_REQUEST), "Invalid action type");
         }
         LOGGER.debug("Saved trainerWorkload {}", trainerWorkload);
         trainerWorkloadRepository.save(trainerWorkload);
