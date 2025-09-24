@@ -1,6 +1,5 @@
 package com.epam.gymapp.TrainerWorkloadService.api.controller;
 
-import com.epam.gymapp.TrainerWorkloadService.dto.TrainerWorkloadRequest;
 import com.epam.gymapp.TrainerWorkloadService.dto.TrainerWorkloadSummaryResponse;
 import com.epam.gymapp.TrainerWorkloadService.service.TrainerWorkloadService;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ public class TrainerWorkloadController {
     public TrainerWorkloadController(TrainerWorkloadService trainerWorkloadService) {
         this.trainerWorkloadService = trainerWorkloadService;
     }
-
 
     @GetMapping("/{trainerUsername}")
     public ResponseEntity<TrainerWorkloadSummaryResponse> returnWorkload(@PathVariable("trainerUsername") String trainerUsername) {
