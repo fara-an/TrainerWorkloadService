@@ -16,11 +16,6 @@ public class TrainerWorkloadController {
         this.trainerWorkloadService = trainerWorkloadService;
     }
 
-    @PostMapping
-    public String processTrainerWorkload(@RequestBody TrainerWorkloadRequest trainerWorkloadRequest){
-        trainerWorkloadService.processTrainerWorkload(trainerWorkloadRequest);
-        return "success";
-    }
 
     @GetMapping("/{trainerUsername}")
     public ResponseEntity<TrainerWorkloadSummaryResponse> returnWorkload(@PathVariable("trainerUsername") String trainerUsername) {
