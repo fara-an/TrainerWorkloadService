@@ -33,4 +33,8 @@ public class TrainerWorkload {
         years.add(yearSummary);
     }
 
+    public int getTotalDuration() {
+        return years.stream().mapToInt(YearSummary::getTotalDuration).sum();
+    }
+
 }

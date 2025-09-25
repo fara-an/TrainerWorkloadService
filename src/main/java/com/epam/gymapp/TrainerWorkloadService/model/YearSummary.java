@@ -34,4 +34,8 @@ public class YearSummary {
         months.remove(monthSummary);
     }
 
+    public int getTotalDuration(){
+       return months.stream().mapToInt(MonthSummary::getTotalDuration).sum();
+    }
+
 }
