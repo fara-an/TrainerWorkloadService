@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -22,8 +23,7 @@ import java.time.Year;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class TrainerWorkloadServiceImplTest {
@@ -61,7 +61,6 @@ public class TrainerWorkloadServiceImplTest {
 
     @Test
     public void processTrainerWorkload_addNewTrainer_addsDuration() {
-        TrainerWorkloadRequest request = new TrainerWorkloadRequest();
 
         when(trainerWorkloadRepository.findById("john_doe")).thenReturn(Optional.empty());
 
@@ -96,6 +95,23 @@ public class TrainerWorkloadServiceImplTest {
         verify(trainerWorkloadRepository).save(existing);
     }
 
+    @Test
+    void processTrainerWorkload_invalidActionType_throwsException() {
+        request.setActionType(ActionType.UPDATE);
+
+        TrainerWorkload existing = new TrainerWorkload("john_doe");
+        YearSummary ys = new YearSummary(Year.of(2025));
+        MonthSummary ms = new MonthSummary(Month.MARCH);
+        ms.addDuration(120);
+        ys.addMonthSummary(ms);
+        existing.addYearSummary(ys);
+
+        when(trainerWorkloadRepository.findById("john_doe")).thenReturn(Optional.of(existing));
+
+        assertThrows(ResponseStatusException.class, ()->underTest.processTrainerWorkload(request));
+        verify(trainerWorkloadRepository, never()).save(existing);
+
+    }
 
 
     @Test
