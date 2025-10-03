@@ -31,13 +31,12 @@ public class TrainerWorkloadSteps {
     private MockMvc mockMvc;
 
     @Autowired
-    private TrainerWorkloadService trainerWorkloadService; // This is a @MockBean from CucumberSpringConfig
+    private TrainerWorkloadService trainerWorkloadService;
 
     private ResultActions response;
 
     @Given("^trainer workload exists for username \"(.*)\"$")
     public void trainer_workload_exists(String username) {
-        // build a sample response DTO
         YearSummaryDto y = new YearSummaryDto(2025,
                 List.of(new MonthSummaryDto(Month.JANUARY, 120), new MonthSummaryDto(Month.FEBRUARY, 60)));
         TrainerWorkloadSummaryResponse dto = new TrainerWorkloadSummaryResponse(

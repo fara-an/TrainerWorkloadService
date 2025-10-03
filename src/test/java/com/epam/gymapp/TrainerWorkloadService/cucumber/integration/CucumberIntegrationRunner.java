@@ -13,7 +13,7 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 @SelectClasspathResource("features/integration")
 @ConfigurationParameter(
         key = GLUE_PROPERTY_NAME,
-        value = "com.epam.gymapp.TrainerWorkloadService.cucumber.integration"
+        value = "com.epam.gymapp"
 )
 @ConfigurationParameter(
         key = PLUGIN_PROPERTY_NAME,

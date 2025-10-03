@@ -22,7 +22,6 @@ import org.springframework.jms.support.converter.MessageType;
 import java.util.HashMap;
 import java.util.Map;
 
-@Profile("!local")
 @Configuration
 @EnableJms
 public class ConsumerJmsConfig {
