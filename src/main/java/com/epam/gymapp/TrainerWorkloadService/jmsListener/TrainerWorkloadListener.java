@@ -9,7 +9,6 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("!local")
 public class TrainerWorkloadListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrainerWorkloadListener.class);
     private final TrainerWorkloadService trainerWorkloadService;
