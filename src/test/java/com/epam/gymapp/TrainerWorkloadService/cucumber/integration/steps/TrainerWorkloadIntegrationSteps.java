@@ -1,12 +1,14 @@
 package com.epam.gymapp.TrainerWorkloadService.cucumber.integration.steps;
 
+import com.epam.gymapp.TrainerWorkloadService.cucumber.integration.steps.dtos.Credentials;
+import com.epam.gymapp.TrainerWorkloadService.cucumber.integration.steps.dtos.LoginResponse;
+import com.epam.gymapp.TrainerWorkloadService.cucumber.integration.steps.dtos.TrainingAddDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.*;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 
