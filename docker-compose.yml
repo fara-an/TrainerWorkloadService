@@ -1,0 +1,63 @@
+services:
+
+  activeMq:
+    image: rmohr/activemq:5.15.6
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+
+  mongo:
+    image: mongo:7
+    container_name: trainerworkload-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  trainerworkload-service:
+    image: trainerworkloadservice:1.0
+    container_name: trainerworkload-service
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SERVER_PORT: 8081
+      MONGODB_URL: mongodb://mongo:27017
+    ports:
+      - "8081:8081"
+    env_file:
+      - .env
+    depends_on:
+      - activeMq
+      - mongo
+
+  postgres:
+    image: postgres:16
+    container_name: gym-postgres
+    environment:
+      POSTGRES_DB: gymdb
+      POSTGRES_USER: gymuser
+      POSTGRES_PASSWORD: gympass
+    ports:
+      - "5433:5432"
+    volumes:
+      - gym-data:/var/lib/postgresql/data
+
+  gymapp-service:
+    image: gymapp-service:1.4
+    container_name: gymapp
+    depends_on:
+      - activeMq
+      - postgres
+    ports:
+      - "8082:8082"
+    env_file:
+      - .env
+      - .envgymapp
+
+volumes:
+  gym-data:
+  mongo_data:
