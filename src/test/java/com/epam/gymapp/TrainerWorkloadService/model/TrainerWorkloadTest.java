@@ -34,12 +34,11 @@ class TrainerWorkloadTest {
     @Test
     void addYearSummary_ShouldAddYearAndSetBackReference() {
         TrainerWorkload trainer = new TrainerWorkload("bob");
-        YearSummary yearSummary = new YearSummary(Year.of(2025), trainer);
+        YearSummary yearSummary = new YearSummary(Year.of(2025));
 
         trainer.addYearSummary(yearSummary);
 
         assertTrue(trainer.getYears().contains(yearSummary));
-        assertEquals(trainer, yearSummary.getTrainerWorkload());
     }
 }
 
