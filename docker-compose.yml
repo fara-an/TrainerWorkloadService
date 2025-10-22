@@ -6,6 +6,8 @@ services:
     ports:
       - "61616:61616"
       - "8161:8161"
+    networks:
+      - gymapp_network
 
   mongo:
     image: mongo:7
@@ -19,6 +21,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - gymapp_network
 
   trainerworkload-service:
     image: trainerworkloadservice:1.0
@@ -34,6 +38,8 @@ services:
     depends_on:
       - activeMq
       - mongo
+    networks:
+      - gymapp_network
 
   postgres:
     image: postgres:16
@@ -46,6 +52,8 @@ services:
       - "5433:5432"
     volumes:
       - gym-data:/var/lib/postgresql/data
+    networks:
+      - gymapp_network
 
   gymapp-service:
     image: gymapp-service:1.4
@@ -58,7 +66,13 @@ services:
     env_file:
       - .env
       - .envgymapp
+    networks:
+      - gymapp_network
 
 volumes:
   gym-data:
   mongo_data:
+
+networks:
+  gymapp_network:
+    driver: bridge
