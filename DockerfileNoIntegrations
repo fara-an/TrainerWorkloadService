@@ -1,4 +1,3 @@
-
 FROM maven:3.9.8-eclipse-temurin-21 AS build
 WORKDIR /app
 
@@ -19,3 +18,4 @@ EXPOSE 8081
 ENV SPRING_PROFILES_ACTIVE=dev
 
 ENTRYPOINT ["java","-jar","app.jar"]
+
