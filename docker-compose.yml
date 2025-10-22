@@ -2,6 +2,7 @@ services:
 
   activeMq:
     image: rmohr/activemq:5.15.6
+    container_name: activeMq
     ports:
       - "61616:61616"
       - "8161:8161"

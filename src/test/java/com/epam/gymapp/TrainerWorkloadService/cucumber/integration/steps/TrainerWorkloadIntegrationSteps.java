@@ -23,7 +23,6 @@ public class TrainerWorkloadIntegrationSteps {
     private ObjectMapper objectMapper;
     private ResponseEntity<String> lastResponse;
     private HttpHeaders httpHeaders;
-    private HttpEntity<?> httpEntity;
 
     String jwtToken;
     String baseGymAppUrl = "http://localhost:8082/gymapp";
