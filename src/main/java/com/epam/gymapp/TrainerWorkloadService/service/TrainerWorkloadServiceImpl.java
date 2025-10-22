@@ -6,10 +6,12 @@ import com.epam.gymapp.TrainerWorkloadService.model.MonthSummary;
 import com.epam.gymapp.TrainerWorkloadService.model.TrainerWorkload;
 import com.epam.gymapp.TrainerWorkloadService.model.YearSummary;
 import com.epam.gymapp.TrainerWorkloadService.repository.TrainerWorkloadRepository;
+import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -25,7 +27,6 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
         this.trainerWorkloadRepository = trainerWorkloadRepository;
     }
 
-    @Transactional
     @Override
     public void processTrainerWorkload(TrainerWorkloadRequest workloadRequest) {
         LOGGER.debug("Started to process {}'s work hours", workloadRequest.getTrainerUsername());
@@ -53,13 +54,15 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
             monthSummary.addDuration(workloadRequest.getDuration());
         } else if (ActionType.DELETE == workloadRequest.getActionType()) {
             monthSummary.subtractDuration(workloadRequest.getDuration());
+        }else {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(HttpStatus.SC_BAD_REQUEST), "Invalid action type");
         }
+        LOGGER.debug("Saved trainerWorkload {}", trainerWorkload);
         trainerWorkloadRepository.save(trainerWorkload);
     }
 
 
 
-    @Transactional
     @Override
     public TrainerWorkloadSummaryResponse calculateTrainerWorkloadSummary(String trainerUsername) {
         TrainerWorkload trainerWorkload = trainerWorkloadRepository.findById(trainerUsername).orElseThrow(() -> new EntityNotFoundException("Trainer with username " + trainerUsername + " not found"));
@@ -84,7 +87,7 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
                 .findFirst()
                 .orElseGet(() -> {
                     LOGGER.debug("New YearSummary is getting created ");
-                    YearSummary yearSummary = new YearSummary(year, trainerWorkload);
+                    YearSummary yearSummary = new YearSummary(year);
                     trainerWorkload.addYearSummary(yearSummary);
                     return yearSummary;
                 });
@@ -95,11 +98,10 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
                 .filter(m -> m.getMonth() == month)
                 .findFirst()
                 .orElseGet(() -> {
-                    MonthSummary newMonth = new MonthSummary(month, yearSummary);
+                    MonthSummary newMonth = new MonthSummary(month);
                     yearSummary.addMonthSummary(newMonth);
                     return newMonth;
                 });
     }
-
-
 }
+

@@ -9,11 +9,13 @@ import com.epam.gymapp.TrainerWorkloadService.model.TrainerWorkload;
 import com.epam.gymapp.TrainerWorkloadService.model.YearSummary;
 import com.epam.gymapp.TrainerWorkloadService.repository.TrainerWorkloadRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -21,8 +23,7 @@ import java.time.Year;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class TrainerWorkloadServiceImplTest {
@@ -32,6 +33,8 @@ public class TrainerWorkloadServiceImplTest {
     private AutoCloseable autoCloseable;
     private TrainerWorkloadServiceImpl underTest;
     private ArgumentCaptor<TrainerWorkload> argumentCaptor = ArgumentCaptor.forClass(TrainerWorkload.class);
+
+    private static TrainerWorkloadRequest request;
 
     @BeforeEach
     void initService() {
@@ -44,10 +47,9 @@ public class TrainerWorkloadServiceImplTest {
         autoCloseable.close();
     }
 
-    @Test
-    public void processTrainerWorkload_addNewTrainer_addsDuration() {
-        TrainerWorkloadRequest request = new TrainerWorkloadRequest();
-
+    @BeforeAll
+    static void initData() {
+        request = new TrainerWorkloadRequest();
         request.setTrainerUsername("john_doe");
         request.setFirstName("John");
         request.setLastName("Doe");
@@ -55,6 +57,10 @@ public class TrainerWorkloadServiceImplTest {
         request.setTrainingDate(LocalDateTime.of(2025, Month.MARCH, 10, 10, 0));
         request.setDuration(60);
         request.setActionType(ActionType.ADD);
+    }
+
+    @Test
+    public void processTrainerWorkload_addNewTrainer_addsDuration() {
 
         when(trainerWorkloadRepository.findById("john_doe")).thenReturn(Optional.empty());
 
@@ -69,28 +75,44 @@ public class TrainerWorkloadServiceImplTest {
         assertEquals(Month.MARCH, monthSummary.getMonth());
         assertEquals(60, monthSummary.getTotalDuration());
     }
+
     @Test
     void processTrainerWorkload_existingTrainer_deletesDuration() {
         TrainerWorkload existing = new TrainerWorkload("john_doe");
-        YearSummary ys = new YearSummary(Year.of(2025), existing);
-        MonthSummary ms = new MonthSummary(Month.MARCH, ys);
+        YearSummary ys = new YearSummary(Year.of(2025));
+        MonthSummary ms = new MonthSummary(Month.MARCH);
         ms.addDuration(120);
         ys.addMonthSummary(ms);
         existing.addYearSummary(ys);
 
-        TrainerWorkloadRequest request = new TrainerWorkloadRequest();
-        request.setTrainerUsername("john_doe");
-        request.setTrainingDate(LocalDateTime.of(2025, Month.MARCH, 10, 10, 0));
-        request.setDuration(30);
         request.setActionType(ActionType.DELETE);
 
         when(trainerWorkloadRepository.findById("john_doe")).thenReturn(Optional.of(existing));
 
         underTest.processTrainerWorkload(request);
 
-        assertEquals(90, ms.getTotalDuration());
+        assertEquals(60, ms.getTotalDuration());
         verify(trainerWorkloadRepository).save(existing);
     }
+
+    @Test
+    void processTrainerWorkload_invalidActionType_throwsException() {
+        request.setActionType(ActionType.UPDATE);
+
+        TrainerWorkload existing = new TrainerWorkload("john_doe");
+        YearSummary ys = new YearSummary(Year.of(2025));
+        MonthSummary ms = new MonthSummary(Month.MARCH);
+        ms.addDuration(120);
+        ys.addMonthSummary(ms);
+        existing.addYearSummary(ys);
+
+        when(trainerWorkloadRepository.findById("john_doe")).thenReturn(Optional.of(existing));
+
+        assertThrows(ResponseStatusException.class, ()->underTest.processTrainerWorkload(request));
+        verify(trainerWorkloadRepository, never()).save(existing);
+
+    }
+
 
     @Test
     void calculateTrainerWorkloadSummary_existingTrainer_returnsSummary() {
@@ -99,8 +121,8 @@ public class TrainerWorkloadServiceImplTest {
         trainer.setLastName("Doe");
         trainer.setActive(true);
 
-        YearSummary ys = new YearSummary(Year.of(2025), trainer);
-        ys.addMonthSummary(new MonthSummary(Month.MARCH, ys));
+        YearSummary ys = new YearSummary(Year.of(2025));
+        ys.addMonthSummary(new MonthSummary(Month.MARCH));
         trainer.addYearSummary(ys);
 
         when(trainerWorkloadRepository.findById("john_doe")).thenReturn(Optional.of(trainer));

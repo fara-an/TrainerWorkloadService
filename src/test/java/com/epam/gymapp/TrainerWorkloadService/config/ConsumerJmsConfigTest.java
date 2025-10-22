@@ -11,8 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -20,13 +19,12 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = ConsumerJmsConfig.class)
+@ActiveProfiles("test")
 class ConsumerJmsConfigTest {
 
     @Autowired
     private ApplicationContext context;
 
-    @MockitoBean
-    PlatformTransactionManager platformTransactionManager;
 
     @Test
     void objectMapper_ShouldHaveJavaTimeModuleAndDisableTimestamps() {
@@ -60,7 +58,6 @@ class ConsumerJmsConfigTest {
         DefaultJmsListenerContainerFactory factory = context.getBean(DefaultJmsListenerContainerFactory.class);
 
         assertNotNull(factory);
-        assertTrue((Boolean)  getFieldFromHierarchy(factory, "sessionTransacted"));
         assertEquals("3-10",getFieldFromHierarchy(factory, "concurrency"));
 
     }
