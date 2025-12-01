@@ -1,20 +1,17 @@
 package com.epam.gymapp.TrainerWorkloadService.model;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.mapping.Document;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "trainer_workloads")
+@DynamoDbBean
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@CompoundIndex(name = "first_last_idx", def = "{'firstName': 1, 'lastName': 1}")
 public class TrainerWorkload {
-    @Id
     private String username;
 
     private String firstName;
@@ -24,6 +21,11 @@ public class TrainerWorkload {
     private boolean isActive;
 
     private List<YearSummary> years = new ArrayList<>();
+
+    @DynamoDbPartitionKey
+    public String getUsername() {
+        return username;
+    }
 
     public TrainerWorkload(String trainerUsername) {
         this.username = trainerUsername;

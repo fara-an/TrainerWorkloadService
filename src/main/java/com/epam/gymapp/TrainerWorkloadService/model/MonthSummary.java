@@ -3,10 +3,10 @@ package com.epam.gymapp.TrainerWorkloadService.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 
 import java.time.Month;
-
+@DynamoDbBean
 @Getter
 @Setter
 @NoArgsConstructor
