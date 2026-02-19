@@ -21,7 +21,7 @@ import org.springframework.jms.support.converter.MessageType;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@Profile("!no-integrations")
 @Configuration
 @EnableJms
 public class ConsumerJmsConfig {

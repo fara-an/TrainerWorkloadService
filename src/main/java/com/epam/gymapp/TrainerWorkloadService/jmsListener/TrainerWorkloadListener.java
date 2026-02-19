@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
-
+@Profile("!no-integrations")
 @Component
 public class TrainerWorkloadListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrainerWorkloadListener.class);
